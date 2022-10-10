@@ -13,9 +13,11 @@
     <nav>
         <a href="/">Home</a>&nbsp;
 
-        <form action="/logout" method="POST" style="display: inline-block">
-            <button type="submit">Log out</button>
-        </form>
+        <?php if (user_signed_in()): ?>
+            <form action="/logout" method="POST" style="display: inline-block">
+                <button type="submit">Log out</button>
+            </form>
+        <?php endif ?>
     </nav>
 </header>
 <main>
