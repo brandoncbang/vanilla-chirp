@@ -24,7 +24,9 @@ class StoreSessionValidator extends Validator
             return $errors;
         }
 
-        if (!User::findByEmailAndPassword($input['email'], $input['password'])) {
+        $user = User::findByEmail($input['email']);
+
+        if (!$user || !password_verify($input['password'], $user->password)) {
             $errors['user'] = 'Incorrect email or password.';
         }
 

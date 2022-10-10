@@ -16,8 +16,7 @@ class SessionController
     {
         $validated = (new StoreSessionValidator($_POST))->validated();
 
-        // TODO: Get hash of password to compare with stored.
-        sign_in(User::findByEmailAndPassword($validated['email'], $validated['password']));
+        sign_in(User::findByEmail($validated['email']));
 
         redirect('/');
     }
