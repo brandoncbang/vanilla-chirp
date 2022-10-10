@@ -2,10 +2,17 @@
 
 namespace App\Support;
 
+/**
+ * Database connection singleton with convenient methods for executing statements.
+ */
 class DB extends \PDO
 {
     protected static DB $instance;
 
+    /**
+     * Get the current DB connection if it exists, otherwise create a new one.
+     * See also: `db()` helper function.
+     */
     public static function getInstance(): DB
     {
         if (!isset(static::$instance)) {
