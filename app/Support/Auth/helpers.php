@@ -30,5 +30,5 @@ function sign_in(User $user)
 
 function sign_out()
 {
-    unset($_SESSION['user_id']);
+    $_SESSION = [];
 }
