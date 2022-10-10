@@ -22,20 +22,19 @@ try {
     if (is_array($handler)) {
         [$controller, $action] = $handler;
         (new $controller)->$action();
-    } else if (is_callable($handler)) {
-        $handler();
-    } else {
-        throw new Exception('Route has no proper handler.');
+
+        return;
     }
+
+    if (is_callable($handler)) {
+        $handler();
+
+        return;
+    }
+
+    throw new Exception('Route has no proper handler.');
 } catch (\App\Support\HttpException $e) {
-    return view('error', [
+    view('error', [
         'error' => $e,
     ]);
-} catch (Error|Exception $e) {
-    echo <<<HTML
-    <div style="color: red;">
-        <h1>{$e->getMessage()}</h1> 
-        <p>{$e->getFile()} at line #{$e->getLine()}</p>
-    </div>
-    HTML;
 }
