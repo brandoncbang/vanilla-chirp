@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Support\DB;
+use App\Support\HttpException;
 
 class Model
 {
@@ -11,8 +11,6 @@ class Model
 
     public static function create(array $attributes): static
     {
-        $db = DB::getInstance();
-
         $table_name = static::$table_name;
         $primary_key = static::$primary_key;
         $columns = implode(', ', array_keys($attributes));
@@ -20,27 +18,44 @@ class Model
 
         $placeholders = implode(', ', array_fill(0, 3, '?'));
 
-        $db->insert("insert into {$table_name} ({$columns}) values ({$placeholders})", [
+        db()->insert("insert into {$table_name} ({$columns}) values ({$placeholders})", [
             ...$values,
         ]);
 
-        return $db->select("select * from {$table_name} where {$primary_key} = last_insert_id()", model: static::class)[0];
+        return static::select("select * from {$table_name} where {$primary_key} = last_insert_id()")[0];
     }
 
-    public static function find(int $id): static
+    public static function find(int $id): ?static
     {
-        $db = DB::getInstance();
-
         $table_name = static::$table_name;
         $primary_key = static::$primary_key;
 
-        return $db->select("select * from {$table_name} where {$primary_key} = ?", [$id], static::class)[0];
+        return static::select("select * from {$table_name} where {$primary_key} = ?", [$id])[0] ?? null;
     }
 
-    public static function select($query, $parameters): ?array
+    /**
+     * Get the model by id if it exists, generate a 404 error otherwise.
+     *
+     * @throws HttpException
+     */
+    public static function findOrFail(int $id): static
     {
-        $db = DB::getInstance();
+        $row = static::find($id);
 
-        return $db->select($query, $parameters, static::class);
+        if (is_null($row)) {
+            throw new HttpException(404, 'Not found.');
+        }
+
+        return $row;
+    }
+
+    /**
+     * Make a SELECT statement and get the results as an array of the model class.
+     *
+     * @return static[]
+     */
+    public static function select($query, $parameters): array
+    {
+        return db()->select($query, $parameters, static::class) ?? [];
     }
 }

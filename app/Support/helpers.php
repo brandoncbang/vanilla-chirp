@@ -1,5 +1,7 @@
 <?php
 
+use App\Support\DB;
+
 function dd($var) {
     var_dump($var);
     die();
@@ -69,4 +71,9 @@ function view($path, $data = [])
 function config(): array
 {
     return require __DIR__ . '/../../config.php';
+}
+
+function db(): DB
+{
+    return DB::getInstance();
 }
