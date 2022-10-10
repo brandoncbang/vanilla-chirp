@@ -9,8 +9,6 @@ class SessionController
 {
     public function create()
     {
-        dd(User::findByEmail('foo@bar'));
-
         return view('auth/login');
     }
 
