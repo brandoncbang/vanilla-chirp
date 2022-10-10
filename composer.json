@@ -1,0 +1,16 @@
+{
+  "name": "brandonbang/vanilla-chirp",
+  "description": "description",
+  "autoload": {
+    "files": [
+      "app/Support/helpers.php",
+      "app/Support/Auth/helpers.php"
+    ],
+    "psr-4": {
+      "App\\": "app/"
+    }
+  },
+  "require": {
+    "ext-pdo": "*"
+  }
+}
