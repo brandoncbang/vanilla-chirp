@@ -54,7 +54,7 @@ class Model
      *
      * @return static[]
      */
-    public static function select($query, $parameters): array
+    public static function select($query, $parameters = []): array
     {
         return db()->select($query, $parameters, static::class) ?? [];
     }
