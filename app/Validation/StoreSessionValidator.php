@@ -11,15 +11,13 @@ class StoreSessionValidator extends Validator
         $errors = [];
 
         if (empty($input['email'])) {
-            $errors[] = 'An email address is required.';
-        }
-
-        if (!filter_var($input['email'], FILTER_VALIDATE_EMAIL)) {
-            $errors[] = 'Please enter a valid email address.';
+            $errors['email'] = 'An email address is required.';
+        } else if (!filter_var($input['email'], FILTER_VALIDATE_EMAIL)) {
+            $errors['email'] = 'Please enter a valid email address.';
         }
 
         if (empty($input['password'])) {
-            $errors[] = 'A password is required.';
+            $errors['password'] = 'A password is required.';
         }
 
         if (!empty($errors)) {
@@ -27,7 +25,7 @@ class StoreSessionValidator extends Validator
         }
 
         if (!User::findByEmailAndPassword($input['email'], $input['password'])) {
-            $errors[] = 'Incorrect email or password.';
+            $errors['user'] = 'Incorrect email or password.';
         }
 
         return $errors;
