@@ -14,12 +14,10 @@ class SessionController
 
     public function store()
     {
-        // TODO: Use password hash
         $validated = (new StoreSessionValidator($_POST))->validated();
 
-        $user = User::findByEmailAndPassword($validated['email'], $validated['password']);
-
-        sign_in($user);
+        // TODO: Get hash of password to compare with stored.
+        sign_in(User::findByEmailAndPassword($validated['email'], $validated['password']));
 
         redirect('/');
     }
