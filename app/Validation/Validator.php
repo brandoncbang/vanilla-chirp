@@ -19,8 +19,8 @@ class Validator
             return $this->input;
         }
 
-        flash('errors', $errors);
-        flash('old', $this->input);
+        flash('_errors', $errors);
+        flash('_old', $this->input);
 
         redirect($_SERVER['HTTP_REFERER']);
 

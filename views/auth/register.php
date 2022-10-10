@@ -3,12 +3,12 @@
 <form action="/register" method="POST">
     <h1>Sign up</h1>
 
-    <?php if (!empty($_SESSION['errors'] ?? [])): ?>
+    <?php if (has_errors()): ?>
         <p>
             <h2>Errors</h2>
 
             <ul>
-                <?php foreach ($_SESSION['errors'] as $error): ?>
+                <?php foreach (errors() as $error): ?>
                     <li><?= e($error) ?></li>
                 <?php endforeach ?>
             </ul>
@@ -16,18 +16,18 @@
     <?php endif ?>
 
     <p>
-        <label for="name">Name</label><br>
-        <input type="text" name="name" id="name" value="<?= e($_SESSION['old']['name'] ?? '') ?>">
+        <label for="name">Name</label>
+        <input type="text" name="name" id="name" value="<?= e(old('name')) ?>">
     </p>
 
     <p>
-        <label for="email">Email</label><br>
-        <input type="text" name="email" id="email" value="<?= e($_SESSION['old']['email'] ?? '') ?>">
+        <label for="email">Email</label>
+        <input type="text" name="email" id="email" value="<?= e(old('email')) ?>">
     </p>
 
     <p>
-        <label for="password">Password</label><br>
-        <input type="password" name="password" id="password" value="<?= e($_SESSION['old']['password'] ?? '') ?>">
+        <label for="password">Password</label>
+        <input type="password" name="password" id="password" value="<?= e(old('password')) ?>">
     </p>
 
     <p>

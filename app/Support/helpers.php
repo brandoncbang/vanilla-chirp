@@ -28,6 +28,33 @@ function flash($key, $data)
     $_SESSION['_flashed_new'][] = $key;
 }
 
+function errors(string $key = null): string|array
+{
+    $errors = $_SESSION['_errors'] ?? [];
+
+    if ($key) {
+        return (string) ($errors[$key] ?? null);
+    }
+
+    return $errors;
+}
+
+function has_errors(): bool
+{
+    return !empty(errors());
+}
+
+function old(string $key = null): string|array
+{
+    $old = $_SESSION['_old'] ?? [];
+
+    if ($key) {
+        return (string) ($old[$key] ?? null);
+    }
+
+    return $old;
+}
+
 function e($string): string
 {
     return htmlspecialchars($string);
