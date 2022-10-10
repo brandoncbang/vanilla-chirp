@@ -44,12 +44,12 @@ function has_errors(): bool
     return !empty(errors());
 }
 
-function old(string $key = null): string|array
+function old(string $name = null): string|array
 {
     $old = $_SESSION['_old'] ?? [];
 
-    if ($key) {
-        return (string) ($old[$key] ?? null);
+    if ($name) {
+        return (string) ($old[$name] ?? null);
     }
 
     return $old;
