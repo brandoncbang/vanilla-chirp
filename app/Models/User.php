@@ -13,13 +13,6 @@ class User extends Model
     public string $created_at;
     public string $updated_at;
 
-    public static function findByEmail(string $email): ?static
-    {
-        return static::select('select * from users where email = ?', [
-            $email,
-        ])[0] ?? null;
-    }
-
     public static function findByEmailAndPassword(string $email, string $password): ?static
     {
         return static::select('select * from users where email = ? and password = ?', [
