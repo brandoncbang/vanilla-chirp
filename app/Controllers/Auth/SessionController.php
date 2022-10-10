@@ -9,7 +9,7 @@ class SessionController
 {
     public function create()
     {
-        return view('auth/login');
+        view('auth/login');
     }
 
     public function store()

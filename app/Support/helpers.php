@@ -65,7 +65,8 @@ function e($string): string
 function view($path, $data = [])
 {
     extract($data);
-    return require __DIR__ . "/../../views/{$path}.php";
+    require __DIR__ . "/../../views/{$path}.php";
+    exit;
 }
 
 function config(): array

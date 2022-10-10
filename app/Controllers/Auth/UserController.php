@@ -9,7 +9,7 @@ class UserController
 {
     public function create()
     {
-        return view('auth/register');
+        view('auth/register');
     }
     
     public function store()
