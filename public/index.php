@@ -35,6 +35,6 @@ try {
     throw new Exception('Route has no proper handler.');
 } catch (\App\Support\HttpException $e) {
     view('error', [
-        'error' => $e,
+        'e' => $e,
     ]);
 }
