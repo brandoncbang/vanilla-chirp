@@ -27,6 +27,10 @@ class ChirpController
             'content' => $validated['content'],
         ]);
 
+        if ($validated['chirp_id']) {
+            redirect("/chirps/{$validated['chirp_id']}");
+        }
+
         redirect('/chirps');
     }
 
