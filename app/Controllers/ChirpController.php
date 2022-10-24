@@ -11,7 +11,9 @@ class ChirpController
     public function index()
     {
         view('chirp/index', [
-            'chirps' => Chirp::paginate(order_by: 'id', order: 'desc'),
+            'chirps' => Chirp::paginate(order_by: 'id', order: 'desc', with: [
+                'user', 'parent', 'replies'
+            ]),
         ]);
     }
 
@@ -21,6 +23,7 @@ class ChirpController
 
         Chirp::create([
             'user_id' => current_user()->id,
+            'chirp_id' => $validated['chirp_id'] ?? null,
             'content' => $validated['content'],
         ]);
 
@@ -32,7 +35,7 @@ class ChirpController
         [$id] = path_params('/chirps/{id}');
 
         view('chirp/show', [
-            'chirp' => Chirp::findOrFail($id),
+            'chirp' => Chirp::findOrFail($id, with: ['user', 'parent', 'replies']),
         ]);
     }
 

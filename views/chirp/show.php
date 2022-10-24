@@ -7,6 +7,22 @@
 <?php include __DIR__ . '/../_head.php' ?>
 
 <section>
+    <?php if ($chirp->parent): ?>
+        <blockquote>
+            <article>
+                <header>
+                    <?= e($chirp->parent->user->name) ?> at <time datetime="<?= e($chirp->parent->created_at) ?>"><?= e($chirp->parent->created_at) ?></time>
+                </header>
+                <p>
+                    <?= e($chirp->parent->content) ?>
+                </p>
+                <footer>
+                    <?= link_to($chirp->parent, 'View') ?>
+                </footer>
+            </article>
+        </blockquote>
+    <?php endif ?>
+
     <article>
         <header>
             <?= e($chirp->user->name) ?> at <time datetime="<?= e($chirp->created_at) ?>"><?= e($chirp->created_at) ?></time>
@@ -38,9 +54,20 @@
         </p>
     </form>
 
-    <article>
-
-    </article>
+    <?php foreach ($chirp->replies ?? [] as $reply): ?>
+        <article>
+            <header>
+                <?= e($reply->user->name) ?> at <time datetime="<?= e($reply->created_at) ?>"><?= e($reply->created_at) ?></time>
+            </header>
+            <p>
+                <?= e($reply->content) ?>
+            </p>
+            <footer>
+                <span><?= $reply->getReplyCount() ?> Replies</span>&nbsp;
+                <?= link_to($reply, 'View') ?>
+            </footer>
+        </article>
+    <?php endforeach ?>
 </section>
 
 <?php include __DIR__ . '/../_tail.php' ?>

@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use App\Models\Traits\LoadsRelations;
 use App\Support\HttpException;
 
 class Model
 {
+    use LoadsRelations;
+
     public static string $table_name;
     public static string $primary_key = 'id';
 
@@ -25,12 +28,18 @@ class Model
         return static::select("select * from {$table_name} where {$primary_key} = last_insert_id()")[0];
     }
 
-    public static function find(int|string $id): ?static
+    public static function find(int|string $id, array $with = []): ?static
     {
         $table_name = static::$table_name;
         $primary_key = static::$primary_key;
 
-        return static::select("select * from {$table_name} where {$primary_key} = ?", [$id])[0] ?? null;
+        $row = static::select("select * from {$table_name} where {$primary_key} = ?", [$id])[0] ?? null;
+
+        if ($row) {
+            $row = static::loadRelations($with, [$row])[0];
+        }
+
+        return $row;
     }
 
     /**
@@ -38,9 +47,9 @@ class Model
      *
      * @throws HttpException
      */
-    public static function findOrFail(int|string $id): static
+    public static function findOrFail(int|string $id, array $with = []): static
     {
-        $row = static::find($id);
+        $row = static::find($id, $with);
 
         if (is_null($row)) {
             throw new HttpException('Not found', 404);
@@ -56,11 +65,19 @@ class Model
      */
     public static function select($query, $parameters = []): array
     {
-        return static::loadRelations(db()->select($query, $parameters, static::class) ?? []);
+        return db()->select($query, $parameters, static::class) ?? [];
     }
 
-    public static function paginate($order_by, $order = 'asc', $limit = 15): array
+    public static function paginate(string|null $where = null, string|null $order_by = null, string $order = 'asc', int $limit = 15, array $with = []): array
     {
+        if (!$order_by) {
+            $order_by = static::$primary_key;
+        }
+
+        if ($where) {
+            $where = " {$where}";
+        }
+
         $table_name = static::$table_name;
 
         $valid_orders = [
@@ -78,7 +95,7 @@ class Model
             $page = 1;
         }
 
-        $count = db()->scalar("select count(*) from {$table_name}");
+        $count = db()->scalar("select count(*) from {$table_name}{$where}");
         $start = ($page - 1) * $limit;
 
         if ($start > $count) {
@@ -87,7 +104,7 @@ class Model
 
         $end = $start + $limit;
 
-        return static::select("select * from {$table_name} order by {$order_by} {$order} limit {$start}, {$end}");
+        return static::loadRelations($with, static::select("select * from {$table_name}{$where} order by {$order_by} {$order} limit {$start}, {$end}"));
     }
 
     public static function destroy(int|string $id): int
@@ -105,40 +122,7 @@ class Model
         }
     }
 
-    public static function loadRelations(array $models): array
-    {
-        return $models;
-    }
-
-    public static function loadBelongsTo($belongs_to, string $foreign_key, string $property, array $models): array
-    {
-        $result = $models;
-
-        $belongs_to_ids = array_unique(array_map(fn ($model) => $model->{$foreign_key}, $models));
-        $belongs_to_ids_str = implode(', ', $belongs_to_ids);
-        $belongs_to_table = $belongs_to::$table_name;
-        $belongs_to_pk = $belongs_to::$primary_key;
-
-        if (empty($models) || empty($belongs_to_ids) || in_array(null, $belongs_to_ids)) {
-            return $result;
-        }
-
-        $belongs_to_rows = $belongs_to::select(
-            "select * from {$belongs_to_table} where {$belongs_to_pk} in ({$belongs_to_ids_str})"
-        );
-
-        foreach ($result as $model) {
-            foreach ($belongs_to_rows as $belongs_to_row) {
-                if ($model->{$foreign_key} === $belongs_to_row->{$belongs_to_pk}) {
-                    $model->{$property} = $belongs_to_row;
-                }
-            }
-        }
-
-        return $result;
-    }
-
-    public function delete()
+    public function delete(): int
     {
         return static::destroy($this->{static::$primary_key});
     }
