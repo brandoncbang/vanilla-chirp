@@ -2,12 +2,12 @@
 
 use App\Support\DB;
 
-function dd($var) {
+function dd(mixed $var) {
     var_dump($var);
     die();
 }
 
-function redirect($to)
+function redirect(string $to)
 {
     header("Location: {$to}");
     exit;
@@ -23,7 +23,7 @@ function request_path(): string
     return rtrim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/') ?: '/';
 }
 
-function param_path($signature): string|false
+function param_path(string $signature): string|false
 {
     $request_path = request_path();
     $pattern = preg_replace('/{(.+?)}/', '(?<$1>[^/]+?)', $signature);
@@ -36,7 +36,7 @@ function param_path($signature): string|false
     return false;
 }
 
-function path_params($signature): array
+function path_params(string $signature): array
 {
     $request_path = request_path();
     $pattern = preg_replace('/{(.+?)}/', '(?<$1>[^/]+?)', $signature);
@@ -54,7 +54,7 @@ function path_params($signature): array
     return $params;
 }
 
-function flash($key, $data)
+function flash(string $key, mixed $data)
 {
     $_SESSION[$key] = $data;
 
@@ -97,7 +97,7 @@ function e(string|null $string): string
     return htmlspecialchars($string ?? '');
 }
 
-function view($path, $data = [])
+function view(string $path, array $data = [])
 {
     extract($data);
     require __DIR__ . "/../../views/{$path}.php";
@@ -115,7 +115,7 @@ function link_to(string|object $link, string $text)
     HTML;
 }
 
-function button_to($action = '', $text = 'Label', $data = [], $method = 'POST', $confirm = false)
+function button_to(string $action = '', string $text = 'Label', array $data = [], string $method = 'POST', bool $confirm = false)
 {
     $data_fields = '';
 
@@ -141,7 +141,7 @@ function button_to($action = '', $text = 'Label', $data = [], $method = 'POST', 
     HTML;
 }
 
-function delete_button($action = '', $method = 'POST'): string
+function delete_button(string $action = '', string $method = 'POST'): string
 {
     return button_to($action, 'Delete', method: $method);
 }
