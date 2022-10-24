@@ -6,6 +6,11 @@
 
 <?php include __DIR__ . '/../_head.php' ?>
 
+<h1>View Chirp</h1>
+<p>
+    <a href="/">&larr; Back to timeline</a>
+</p>
+
 <section>
     <?php if ($chirp->parent): ?>
         <blockquote>
@@ -27,24 +32,30 @@
         <header>
             <?= e($chirp->user->name) ?> at <time datetime="<?= e($chirp->created_at) ?>"><?= e($chirp->created_at) ?></time>
         </header>
-        <section>
+        <p>
             <?= e($chirp->content) ?>
-        </section>
+        </p>
         <footer>
-            <?= delete_button($chirp->getDeletePath()) ?>
+            <?php if ($chirp->user->id === current_user()->id): ?>
+                <?= delete_button($chirp->getDeletePath()) ?>
+            <?php else: ?>
+                <?= button_to('/likes', 'Like', ['chirp_id' => $chirp->id]) ?>
+            <?php endif ?>
         </footer>
     </article>
 </section>
 
 <section>
+    <h2>Replies</h2>
+
     <form action="/chirps/create" method="POST">
         <!-- TODO: Add CSRF token! -->
 
         <input type="hidden" name="chirp_id" value="<?= e($chirp->id) ?>">
 
         <p>
-            <textarea name="content" id="content" rows="6" placeholder="What's on your mind?"
-                      aria-label="What's on your mind?" style="width: 100%"></textarea>
+            <textarea name="content" id="content" rows="2" placeholder="Chirp your reply"
+                      aria-label="Chirp your reply" style="width: 100%"></textarea>
 
             <span style="color: red"><?= e(errors('content')) ?></span>
         </p>
@@ -53,6 +64,7 @@
             <button type="submit">Reply</button>
         </p>
     </form>
+    <br>
 
     <?php foreach ($chirp->replies ?? [] as $reply): ?>
         <article>

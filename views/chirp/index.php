@@ -6,6 +6,8 @@
 
 <?php include __DIR__ . '/../_head.php' ?>
 
+<h1>Timeline</h1>
+
 <section>
     <form action="/chirps/create" method="POST">
         <!-- TODO: Add CSRF token! -->
@@ -21,27 +23,26 @@
             <button type="submit">Chirp!</button>
         </p>
     </form>
-</section>
+    <br>
 
-<?php if (!empty($chirps)): ?>
-    <section>
+    <?php if (!empty($chirps)): ?>
         <?php foreach ($chirps as $chirp): ?>
             <article>
                 <header>
                     <?= e($chirp->user->name) ?> at <time datetime="<?= e($chirp->created_at) ?>"><?= e($chirp->created_at) ?></time>
                 </header>
-                <section>
+                <p>
                     <?= e($chirp->content) ?>
-                </section>
+                </p>
                 <footer>
-                    <?= link_to($chirp, 'View') ?>&nbsp;
-                    <?= delete_button($chirp->getDeletePath()) ?>
+                    <span><?= $chirp->getReplyCount() ?> Replies</span>&nbsp;
+                    <?= link_to($chirp, 'View') ?>
                 </footer>
             </article>
         <?php endforeach ?>
-    </section>
-<?php else: ?>
-    <p>Check back soon, or post your own Chirps!</p>
-<?php endif ?>
+    <?php else: ?>
+        <p>Check back soon, or post your own Chirps!</p>
+    <?php endif ?>
+</section>
 
 <?php include __DIR__ . '/../_tail.php' ?>
