@@ -92,9 +92,9 @@ function old(string $name = null): string|array
     return $old;
 }
 
-function e($string): string
+function e(string|null $string): string
 {
-    return htmlspecialchars($string);
+    return htmlspecialchars($string ?? '');
 }
 
 function view($path, $data = [])
