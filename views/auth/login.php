@@ -2,6 +2,9 @@
 
 <form action="/login" method="POST">
     <h1>Log in</h1>
+    <p>
+        New to Chirper? <a href="/register">Sign up</a>
+    </p>
 
     <?php if (has_errors()): ?>
         <p>
@@ -26,7 +29,6 @@
     </p>
 
     <p>
-        <a href="/register">Sign up</a>&nbsp
         <button>Log in</button>
     </p>
 </form>

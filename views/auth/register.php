@@ -2,6 +2,9 @@
 
 <form action="/register" method="POST">
     <h1>Sign up</h1>
+    <p>
+        Have an account? <a href="/login">Log in</a>
+    </p>
 
     <?php if (has_errors()): ?>
         <p>
@@ -31,7 +34,6 @@
     </p>
 
     <p>
-        <a href="/login">Log in</a>&nbsp
         <button>Sign up</button>
     </p>
 </form>
