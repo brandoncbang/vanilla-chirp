@@ -13,6 +13,11 @@ function redirect($to)
     exit;
 }
 
+function request_method(): string
+{
+    return $_SERVER['REQUEST_METHOD'];
+}
+
 function request_path(): string
 {
     return rtrim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/') ?: '/';

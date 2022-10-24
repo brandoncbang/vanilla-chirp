@@ -5,10 +5,7 @@ use App\Controllers\Auth\UserController;
 use App\Controllers\ChirpController;
 use App\Controllers\HomeController;
 
-$method = $_SERVER['REQUEST_METHOD'];
-$path = rtrim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/') ?: '/';
-
-return match ([$method, $path]) {
+return match ([request_method(), request_path()]) {
     ['GET', '/'] => [HomeController::class, 'show'],
 
     ['GET', '/login'] => [AuthenticatedSessionController::class, 'create'],
