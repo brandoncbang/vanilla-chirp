@@ -111,8 +111,8 @@ function link_to(string|object $link, string $text)
     }
 
     return <<<HTML
-        <a href="{$link}">{$text}</a>
-        HTML;
+    <a href="{$link}">{$text}</a>
+    HTML;
 }
 
 function button_to($action = '', $text = 'Label', $data = [], $method = 'POST', $confirm = false)
