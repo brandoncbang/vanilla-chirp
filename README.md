@@ -4,7 +4,7 @@ A simple but complete Vanilla PHP microblogging app
 ## Requirements
 - PHP 8.1
 - MySQL 8.0
-- Apache, NGinx, or PHP's test server
+- Apache, nginx, or PHP's test server
 
 ## Overview
 The goal for this project is to implement a microblogging app (like Twitter) in PHP without the use of a framework. In addition, the goal is also to find a clear structure that Vanilla PHP projects can follow without adding too many abstractions, using as much of what PHP already provides to us as possible. Some notable patterns used in this project are detailed below.
