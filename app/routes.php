@@ -1,6 +1,6 @@
 <?php
 
-use App\Controllers\Auth\SessionController;
+use App\Controllers\Auth\AuthenticatedSessionController;
 use App\Controllers\Auth\UserController;
 use App\Controllers\ChirpController;
 use App\Controllers\HomeController;
@@ -11,9 +11,9 @@ $path = rtrim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/') ?: '/';
 return match ([$method, $path]) {
     ['GET', '/'] => [HomeController::class, 'show'],
 
-    ['GET', '/login'] => [SessionController::class, 'create'],
-    ['POST', '/login'] => [SessionController::class, 'store'],
-    ['POST', '/logout'] => [SessionController::class, 'destroy'],
+    ['GET', '/login'] => [AuthenticatedSessionController::class, 'create'],
+    ['POST', '/login'] => [AuthenticatedSessionController::class, 'store'],
+    ['POST', '/logout'] => [AuthenticatedSessionController::class, 'destroy'],
 
     ['GET', '/register'] => [UserController::class, 'create'],
     ['POST', '/register'] => [UserController::class, 'store'],

@@ -5,7 +5,7 @@ namespace App\Controllers\Auth;
 use App\Models\User;
 use App\Validation\StoreSessionValidator;
 
-class SessionController
+class AuthenticatedSessionController
 {
     public function create()
     {
