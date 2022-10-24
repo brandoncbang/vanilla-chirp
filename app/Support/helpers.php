@@ -115,16 +115,35 @@ function link_to(string|object $link, string $text)
         HTML;
 }
 
+function button_to($action = '', $text = 'Label', $data = [], $method = 'POST', $confirm = false)
+{
+    $data_fields = '';
+
+    foreach ($data as $name => $value) {
+        $data_fields .= <<<HTML
+        <input type="hidden" name="{$name}" value="{$value}">
+        HTML;
+    }
+
+    $on_click = '';
+
+    if ($confirm) {
+        $on_click = " onclick=\"return confirm('Are you sure?')\"";
+    }
+
+    return <<<HTML
+    <form action="{$action}" method="{$method}" style="display: inline-block"{$on_click}>
+        <!-- TODO: Add CSRF token! -->
+        {$data_fields}
+
+        <button type="submit">{$text}</button>
+    </form>
+    HTML;
+}
+
 function delete_button($action = '', $method = 'POST'): string
 {
-    return <<<HTML
-        <form action="{$action}" method="{$method}" onclick="return confirm('Are you sure?')"
-              style="display: inline-block">
-            <!-- TODO: Add CSRF token! -->
-
-            <button type="submit">Delete</button>
-        </form>
-        HTML;
+    return button_to($action, 'Delete', method: $method);
 }
 
 function config(): array
